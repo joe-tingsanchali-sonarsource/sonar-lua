@@ -1,4 +1,7 @@
 # Maven
+lua-checks/target/
+lua-squid/target/
+sonar-lua-plugin/target/
 target/
 pom.xml.tag
 pom.xml.releaseBackup
