@@ -22,7 +22,10 @@ import org.sonar.lua.grammar.LuaGrammar;
 /**
  * Check that tables don't have too many fields.
  */
-@Rule(key = "TableParameter")
+@Rule(
+  key = "TableParameter",
+  name = "Tables should not have too many fields",
+  description = "Checks that tables do not have too many fields.")
 public class TableWithTooManyFieldsCheck extends LuaCheck {
 
   private static final int DEFAULT = 5;

@@ -23,7 +23,10 @@ import org.sonar.lua.grammar.LuaGrammar;
 /**
  * Check that local functions are not too complex.
  */
-@Rule(key = "LocalFunctionComplexity")
+@Rule(
+  key = "LocalFunctionComplexity",
+  name = "Local functions should not be too complex",
+  description = "Checks that local function complexity does not exceed a configurable threshold.")
 public class LocalFunctionComplexityCheck extends LuaCheck {
 
   private static final int DEFAULT_MAXIMUM_FUNCTION_COMPLEXITY_THRESHOLD = 10;

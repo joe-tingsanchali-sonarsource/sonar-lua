@@ -22,7 +22,10 @@ import org.sonar.lua.grammar.LuaGrammar;
 /**
  * Check that control flow statements are not nested too deeply.
  */
-@Rule(key = "S134")
+@Rule(
+  key = "S134",
+  name = "Control flow statements should not be nested too deeply",
+  description = "Checks that if/for/while statements are not nested too deeply.")
 public class NestedControlFlowDepthCheck extends LuaCheck {
 
   private int nestingLevel;

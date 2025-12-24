@@ -23,7 +23,10 @@ import java.util.List;
 /**
  * Check that lines are not too long.
  */
-@Rule(key = "LineLength")
+@Rule(
+  key = "LineLength",
+  name = "Lines should not be too long",
+  description = "Checks that lines do not exceed a configurable length.")
 public class LineLengthCheck extends LuaCheck {
 
   private static final int DEFAULT_MAXIMUM_LINE_LENGTH = 80;

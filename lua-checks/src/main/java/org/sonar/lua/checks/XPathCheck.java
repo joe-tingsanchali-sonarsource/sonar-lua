@@ -22,7 +22,10 @@ import org.sonar.check.RuleProperty;
  * Template check that can be configured via an XPath-like node type selector.
  * This is a simplified version that matches by node type name.
  */
-@Rule(key = "XPath")
+@Rule(
+  key = "XPath",
+  name = "XPath rule",
+  description = "Template rule to create custom rules using AST node type matching.")
 public class XPathCheck extends LuaCheck {
 
   private static final String DEFAULT_XPATH_QUERY = "";

@@ -21,7 +21,10 @@ import org.sonar.check.RuleProperty;
 /**
  * Check that files don't have too many lines.
  */
-@Rule(key = TooManyLinesInFileCheck.CHECK_KEY)
+@Rule(
+  key = TooManyLinesInFileCheck.CHECK_KEY,
+  name = "Files should not have too many lines",
+  description = "Checks that files do not have too many lines of code.")
 public class TooManyLinesInFileCheck extends LuaCheck {
 
   public static final String CHECK_KEY = "S104";

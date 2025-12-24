@@ -22,7 +22,10 @@ import org.sonar.lua.grammar.LuaGrammar;
 /**
  * Check that functions are not nested too deeply.
  */
-@Rule(key = "NestedFunction")
+@Rule(
+  key = "NestedFunction",
+  name = "Functions should not be nested too deeply",
+  description = "Checks that functions are not nested too deeply.")
 public class NestedFunctionsDepthCheck extends LuaCheck {
 
   private int nestingLevel;

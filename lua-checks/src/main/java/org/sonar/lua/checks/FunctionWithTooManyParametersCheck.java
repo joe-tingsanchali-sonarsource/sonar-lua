@@ -22,7 +22,10 @@ import org.sonar.lua.grammar.LuaGrammar;
 /**
  * Check that functions don't have too many parameters.
  */
-@Rule(key = "S107")
+@Rule(
+  key = "S107",
+  name = "Functions should not have too many parameters",
+  description = "Checks that functions do not have too many parameters.")
 public class FunctionWithTooManyParametersCheck extends LuaCheck {
 
   private static final int DEFAULT = 7;

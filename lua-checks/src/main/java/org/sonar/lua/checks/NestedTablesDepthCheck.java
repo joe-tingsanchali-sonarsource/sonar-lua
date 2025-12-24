@@ -22,7 +22,10 @@ import org.sonar.lua.grammar.LuaGrammar;
 /**
  * Check that tables are not nested too deeply.
  */
-@Rule(key = "NestedTable")
+@Rule(
+  key = "NestedTable",
+  name = "Tables should not be nested too deeply",
+  description = "Checks that tables are not nested too deeply.")
 public class NestedTablesDepthCheck extends LuaCheck {
 
   private int nestingLevel;

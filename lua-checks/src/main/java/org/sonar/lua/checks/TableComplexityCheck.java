@@ -23,7 +23,10 @@ import org.sonar.lua.grammar.LuaGrammar;
 /**
  * Check that tables are not too complex.
  */
-@Rule(key = "TableComplexity")
+@Rule(
+  key = "TableComplexity",
+  name = "Tables should not be too complex",
+  description = "Checks that table complexity does not exceed a configurable threshold.")
 public class TableComplexityCheck extends LuaCheck {
 
   private static final int DEFAULT_MAXIMUM_TABLE_COMPLEXITY_THRESHOLD = 10;

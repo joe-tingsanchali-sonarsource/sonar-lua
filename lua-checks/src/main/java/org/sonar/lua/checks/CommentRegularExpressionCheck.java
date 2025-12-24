@@ -26,7 +26,10 @@ import java.util.regex.Pattern;
  * Check that comments don't match a configurable regular expression.
  * This is a rule template for creating custom comment rules.
  */
-@Rule(key = "CommentRegularExpression")
+@Rule(
+  key = "CommentRegularExpression",
+  name = "Regular expression on comment",
+  description = "Template rule to flag comments matching a regular expression.")
 public class CommentRegularExpressionCheck extends LuaCheck {
 
   private static final String DEFAULT_REGULAR_EXPRESSION = "";

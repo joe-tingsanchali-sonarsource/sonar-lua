@@ -22,7 +22,10 @@ import org.sonar.lua.checks.utils.ComplexityCalculator;
 /**
  * Check that files are not too complex.
  */
-@Rule(key = FileComplexityCheck.CHECK_KEY)
+@Rule(
+  key = FileComplexityCheck.CHECK_KEY,
+  name = "Files should not be too complex",
+  description = "Checks that file complexity does not exceed a configurable threshold.")
 public class FileComplexityCheck extends LuaCheck {
 
   public static final String CHECK_KEY = "FileComplexity";

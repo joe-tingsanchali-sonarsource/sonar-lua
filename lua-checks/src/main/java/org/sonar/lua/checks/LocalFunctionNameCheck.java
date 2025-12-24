@@ -24,7 +24,10 @@ import java.util.regex.Pattern;
 /**
  * Check that local function names comply with a naming convention.
  */
-@Rule(key = "S100")
+@Rule(
+  key = "S100",
+  name = "Local function names should comply with a naming convention",
+  description = "Checks that local function names match a provided regular expression.")
 public class LocalFunctionNameCheck extends LuaCheck {
 
   private static final String DEFAULT = "^[a-z][a-z_A-Z0-9]*$";
