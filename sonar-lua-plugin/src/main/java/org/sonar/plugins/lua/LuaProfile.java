@@ -1,7 +1,6 @@
 /*
  * SonarQube Lua Plugin
- * Copyright (C) 2016 SonarSource SA
- * mailto:fati.ahmadi66@gmail.com
+ * Copyright (C) 2013-2024
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -12,18 +11,17 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package org.sonar.plugins.lua;
 
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
+import org.sonar.check.Rule;
 import org.sonar.lua.checks.CheckList;
 import org.sonar.plugins.lua.core.Lua;
-import org.sonar.check.Rule;
 
+/**
+ * Defines the default quality profile for Lua.
+ */
 public class LuaProfile implements BuiltInQualityProfilesDefinition {
 
   @Override
@@ -31,15 +29,18 @@ public class LuaProfile implements BuiltInQualityProfilesDefinition {
     NewBuiltInQualityProfile profile = context.createBuiltInQualityProfile(
         CheckList.SONAR_WAY_PROFILE, Lua.KEY);
     profile.setDefault(true);
-    
+
     // Activate all rules from the CheckList
     for (Class<?> checkClass : CheckList.getChecks()) {
       Rule ruleAnnotation = checkClass.getAnnotation(Rule.class);
       if (ruleAnnotation != null) {
-        profile.activateRule(CheckList.REPOSITORY_KEY, ruleAnnotation.key());
+        String ruleKey = ruleAnnotation.key();
+        if (ruleKey != null && !ruleKey.isEmpty()) {
+          profile.activateRule(CheckList.REPOSITORY_KEY, ruleKey);
+        }
       }
     }
-    
+
     profile.done();
   }
 }

@@ -1,7 +1,6 @@
 /*
  * SonarQube Lua Plugin
- * Copyright (C) 2013-2016-2016 SonarSource SA
- * mailto:contact AT sonarsource DOT com
+ * Copyright (C) 2013-2024
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -12,14 +11,9 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package org.sonar.plugins.lua.cobertura;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.FilePredicates;
@@ -39,6 +33,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Parser for Cobertura XML coverage reports.
+ */
 public class CoberturaReportParser {
 
   private static final Logger LOG = LoggerFactory.getLogger(CoberturaReportParser.class);
@@ -47,7 +44,7 @@ public class CoberturaReportParser {
   }
 
   /**
-   * Parse a Cobertura xml report and create measures accordingly
+   * Parse a Cobertura xml report and create measures accordingly.
    */
   public static void parseReport(File xmlFile, final SensorContext context) {
     try {
@@ -85,7 +82,6 @@ public class CoberturaReportParser {
       String fileName = clazz.getAttribute("filename");
 
       InputFile inputFile;
-      // mxml files are not supported by the plugin
       if (inputFileByFilename.containsKey(fileName)) {
         inputFile = inputFileByFilename.get(fileName);
       } else {
@@ -123,12 +119,25 @@ public class CoberturaReportParser {
 
         String isBranch = line.getAttribute("branch");
         String text = line.getAttribute("condition-coverage");
-        if (StringUtils.equals(isBranch, "true") && StringUtils.isNotBlank(text)) {
-          String[] conditions = StringUtils.split(StringUtils.substringBetween(text, "(", ")"), "/");
-          newCoverage.conditions(lineId, Integer.parseInt(conditions[1]), Integer.parseInt(conditions[0]));
+        if ("true".equals(isBranch) && text != null && !text.isEmpty()) {
+          String[] conditions = extractConditions(text);
+          if (conditions.length == 2) {
+            newCoverage.conditions(lineId, Integer.parseInt(conditions[1]), Integer.parseInt(conditions[0]));
+          }
         }
       }
     }
     newCoverage.save();
+  }
+
+  private static String[] extractConditions(String text) {
+    // Extract "X/Y" from "XX% (X/Y)"
+    int start = text.indexOf('(');
+    int end = text.indexOf(')');
+    if (start >= 0 && end > start) {
+      String conditionPart = text.substring(start + 1, end);
+      return conditionPart.split("/");
+    }
+    return new String[0];
   }
 }

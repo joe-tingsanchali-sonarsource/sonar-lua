@@ -1,7 +1,6 @@
 /*
  * SonarQube Lua Plugin
- * Copyright (C) 2013-2016-2016 SonarSource SA
- * mailto:contact AT sonarsource DOT com
+ * Copyright (C) 2013-2024
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -12,69 +11,57 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package org.sonar.lua.checks;
 
 import com.sonar.sslr.api.AstNode;
-
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.lua.api.LuaMetric;
-import org.sonar.lua.checks.utils.LuaCheck;
-import org.sonar.lua.checks.utils.Tags;
+import org.sonar.lua.checks.utils.ComplexityCalculator;
 import org.sonar.lua.grammar.LuaGrammar;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleLinearWithOffsetRemediation;
-import org.sonar.squidbridge.api.SourceFunction;
-import org.sonar.squidbridge.checks.ChecksHelper;
 
-@Rule(key = "LocalFunctionComplexity",
-name = "Local Funtion should not be too complex",
-priority = Priority.MAJOR, 
-tags = Tags.BRAIN_OVERLOAD)
-@ActivatedByDefault
-@SqaleLinearWithOffsetRemediation(coeff = "1min", offset = "10min", effortToFixDescription = "per complexity point above the threshold")
+/**
+ * Check that local functions are not too complex.
+ */
+@Rule(key = "LocalFunctionComplexity")
 public class LocalFunctionComplexityCheck extends LuaCheck {
-	public static final String CHECK_KEY = "MethodComplexity";
-	private static final int DEFAULT_MAXIMUM_LOCALFUNCTION_COMPLEXITY_THRESHOLD = 10;
 
-	@RuleProperty(key = "maximumLocalFunctionComplexityThreshold",
-			description = "The maximum authorized complexity.", defaultValue = ""
-			+ DEFAULT_MAXIMUM_LOCALFUNCTION_COMPLEXITY_THRESHOLD)
-	private int maximumLocalFunctionComplexityThreshold = DEFAULT_MAXIMUM_LOCALFUNCTION_COMPLEXITY_THRESHOLD;
+  private static final int DEFAULT_MAXIMUM_FUNCTION_COMPLEXITY_THRESHOLD = 10;
 
+  @RuleProperty(
+    key = "maximumFunctionComplexityThreshold",
+    description = "The maximum authorized complexity.",
+    defaultValue = "" + DEFAULT_MAXIMUM_FUNCTION_COMPLEXITY_THRESHOLD)
+  public int maximumFunctionComplexityThreshold = DEFAULT_MAXIMUM_FUNCTION_COMPLEXITY_THRESHOLD;
 
-	@Override
-	public void init() {
-		subscribeTo(LuaGrammar.LOCALFUNCSTAT);
-		
-	}
+  @Override
+  public void init() {
+    subscribeTo(LuaGrammar.LOCALFUNCSTAT);
+  }
 
-	@Override
-	public void leaveNode(AstNode node) {
-		SourceFunction function = (SourceFunction) getContext()
-				.peekSourceCode();
-	
-		int functionComplexity = ChecksHelper.getRecursiveMeasureInt(function,
-				LuaMetric.COMPLEXITY);
-		if (functionComplexity > maximumLocalFunctionComplexityThreshold) {
-			String message = String
-					.format("LocalFunction has a complexity of %s which is greater than %s authorized.",
-							functionComplexity,
-							maximumLocalFunctionComplexityThreshold);
-			createIssueWithCost(message, node, (double) functionComplexity
-					- maximumLocalFunctionComplexityThreshold);
-		}
-	}
+  @Override
+  public void leaveNode(AstNode node) {
+    int complexity = calculateComplexity(node);
+    if (complexity > maximumFunctionComplexityThreshold) {
+      String message = String.format(
+          "Local function has a complexity of %d which is greater than %d authorized.",
+          complexity, maximumFunctionComplexityThreshold);
+      addIssueWithCost(node, message, (double) complexity - maximumFunctionComplexityThreshold);
+    }
+  }
 
+  private int calculateComplexity(AstNode localFuncNode) {
+    AstNode funcBody = localFuncNode.getFirstChild(LuaGrammar.FUNCBODY);
+    if (funcBody != null) {
+      AstNode block = funcBody.getFirstChild(LuaGrammar.BLOCK);
+      if (block != null) {
+        return 1 + ComplexityCalculator.calculate(block);
+      }
+    }
+    return 1;
+  }
 
-	public void setMaximumFunctionComplexityThreshold(int threshold) {
-		this.maximumLocalFunctionComplexityThreshold = threshold;
-	}
-
+  public void setMaximumFunctionComplexityThreshold(int threshold) {
+    this.maximumFunctionComplexityThreshold = threshold;
+  }
 }

@@ -1,7 +1,6 @@
 /*
  * SonarQube Lua Plugin
- * Copyright (C) 2016 SonarSource SA
- * mailto:fati.ahmadi66 AT gmail DOT com
+ * Copyright (C) 2013-2024
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -12,28 +11,14 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package org.sonar.lua.checks.utils;
 
-
-
-import com.sonar.sslr.api.AstNode;
-import org.sonar.squidbridge.api.CheckMessage;
-import org.sonar.squidbridge.checks.SquidCheck;
-
-public class LuaCheck extends SquidCheck {
-
-  protected void createIssueWithCost(String message, AstNode node, double effort) {
-    CheckMessage checkMessage = new CheckMessage((Object) this, message);
-    if (node.getTokenLine() > 0) {
-      checkMessage.setLine(node.getTokenLine());
-    }
-    checkMessage.setCost(effort);
-    getContext().log(checkMessage);
-  }
-
+/**
+ * @deprecated Use {@link org.sonar.lua.checks.LuaCheck} instead.
+ */
+@Deprecated
+public abstract class LuaCheck extends org.sonar.lua.checks.LuaCheck {
+  // This class is kept for backward compatibility
+  // All functionality is in the parent class
 }

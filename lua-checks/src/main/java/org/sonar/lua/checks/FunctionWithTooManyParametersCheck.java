@@ -1,7 +1,6 @@
 /*
  * SonarQube Lua Plugin
- * Copyright (C) 2016 
- * mailto:fati.ahmadi66 AT gmail DOT com
+ * Copyright (C) 2013-2024
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -12,42 +11,27 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package org.sonar.lua.checks;
 
 import com.sonar.sslr.api.AstNode;
-
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-
-import org.sonar.lua.checks.utils.Tags;
 import org.sonar.lua.grammar.LuaGrammar;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
-@Rule(
-  key = "S107",
-  name = "Functions should not have too many parameters",
-  priority = Priority.MAJOR,
-  tags = {Tags.BRAIN_OVERLOAD})
-@ActivatedByDefault
-@SqaleConstantRemediation("20min")
-public class FunctionWithTooManyParametersCheck extends SquidCheck<LexerlessGrammar> {
+/**
+ * Check that functions don't have too many parameters.
+ */
+@Rule(key = "S107")
+public class FunctionWithTooManyParametersCheck extends LuaCheck {
 
   private static final int DEFAULT = 7;
+
   @RuleProperty(
     key = "max",
-    description = "Maximum authorized number of parameters",
+    description = "Maximum authorized number of parameters.",
     defaultValue = "" + DEFAULT)
-  int max = DEFAULT;
-
+  public int max = DEFAULT;
 
   @Override
   public void init() {
@@ -56,13 +40,19 @@ public class FunctionWithTooManyParametersCheck extends SquidCheck<LexerlessGram
 
   @Override
   public void visitNode(AstNode astNode) {
-    int nbParameters = astNode.getChildren(LuaGrammar.NAME, LuaGrammar.Punctuator.ELLIPSIS).size();
- 
-    if (nbParameters > max  ) {
-      getContext().createLineViolation(this, "This function has {0,number,integer} parameters, which is greater than the {1,number,integer} authorized.",
-        astNode, nbParameters, max);
-    }
-   
-  }
+    // Only check if this is a parameter list (inside PARLIST)
+    AstNode parent = astNode.getParent();
+    if (parent != null && parent.is(LuaGrammar.PARLIST)) {
+      int nbParameters = astNode.getChildren(LuaGrammar.NAME).size();
+      // Also count ellipsis if present in parent
+      if (parent.getFirstChild(LuaGrammar.Punctuator.ELLIPSIS) != null) {
+        nbParameters++;
+      }
 
+      if (nbParameters > max) {
+        addIssue(astNode, "This function has {0} parameters, which is greater than the {1} authorized.",
+            nbParameters, max);
+      }
+    }
+  }
 }

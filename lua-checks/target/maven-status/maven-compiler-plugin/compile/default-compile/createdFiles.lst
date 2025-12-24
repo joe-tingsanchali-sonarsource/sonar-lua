@@ -1,9 +1,11 @@
 org/sonar/lua/checks/NestedFunctionsDepthCheck.class
 org/sonar/lua/checks/LocalFunctionComplexityCheck.class
+org/sonar/lua/checks/LuaCheck.class
 org/sonar/lua/checks/LocalFunctionNameCheck.class
 org/sonar/lua/checks/utils/Tags.class
 org/sonar/lua/checks/FunctionWithTooManyParametersCheck.class
 org/sonar/lua/checks/package-info.class
+org/sonar/lua/checks/LuaCheckContext.class
 org/sonar/lua/checks/MethodComplexityCheck.class
 org/sonar/lua/checks/TableWithTooManyFieldsCheck.class
 org/sonar/lua/checks/FileComplexityCheck.class
@@ -12,6 +14,7 @@ org/sonar/lua/checks/XPathCheck.class
 org/sonar/lua/checks/LineLengthCheck.class
 org/sonar/lua/checks/CommentRegularExpressionCheck.class
 org/sonar/lua/checks/utils/package-info.class
+org/sonar/lua/checks/utils/ComplexityCalculator.class
 org/sonar/lua/checks/CheckList.class
 org/sonar/lua/checks/FunctionCallComplexityCheck.class
 org/sonar/lua/checks/FunctionComplexityCheck.class

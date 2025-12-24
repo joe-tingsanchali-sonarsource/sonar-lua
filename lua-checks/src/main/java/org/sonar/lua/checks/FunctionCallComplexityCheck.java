@@ -1,7 +1,6 @@
 /*
  * SonarQube Lua Plugin
- * Copyright (C) 2016 SonarSource SA
- * mailto:fati.ahmadi66 AT gmail DOT com
+ * Copyright (C) 2013-2024
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -12,66 +11,46 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package org.sonar.lua.checks;
 
 import com.sonar.sslr.api.AstNode;
-
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.lua.checks.utils.ComplexityCalculator;
 import org.sonar.lua.grammar.LuaGrammar;
-import org.sonar.lua.api.LuaMetric;
-import org.sonar.lua.checks.utils.LuaCheck;
-import org.sonar.lua.checks.utils.Tags;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleLinearWithOffsetRemediation;
-import org.sonar.squidbridge.api.SourceClass;
-import org.sonar.squidbridge.api.SourceFunction;
-import org.sonar.squidbridge.checks.ChecksHelper;
 
-@Rule(
-  key = "FuncCaLL",
-  
-  name = "FunctionCaLL should not be too complex",
-  description = "FunctionCaLL should not be too complex.",
-  priority = Priority.MAJOR,
-  tags = Tags.BRAIN_OVERLOAD )
-@ActivatedByDefault
-@SqaleLinearWithOffsetRemediation(coeff = "1min", offset = "10min", effortToFixDescription = "per complexity point above the threshold")
+/**
+ * Check that function calls are not too complex.
+ */
+@Rule(key = "FuncCaLL")
 public class FunctionCallComplexityCheck extends LuaCheck {
 
   private static final int DEFAULT_MAXIMUM_FUNCCALL_COMPLEXITY_THRESHOLD = 5;
 
   @RuleProperty(
     key = "maxFuncCallComplexityThreshold",
-    description = "The max authorized call.",
+    description = "The maximum authorized call complexity.",
     defaultValue = "" + DEFAULT_MAXIMUM_FUNCCALL_COMPLEXITY_THRESHOLD)
-  private int maximumFunctionCallComplexityThreshold = DEFAULT_MAXIMUM_FUNCCALL_COMPLEXITY_THRESHOLD;
+  public int maximumFunctionCallComplexityThreshold = DEFAULT_MAXIMUM_FUNCCALL_COMPLEXITY_THRESHOLD;
 
   @Override
   public void init() {
     subscribeTo(LuaGrammar.FUNCTIONCALL);
-   
   }
 
   @Override
   public void leaveNode(AstNode node) {
-	  SourceFunction function = (SourceFunction) getContext().peekSourceCode();
-
-    int functionComplexity = ChecksHelper.getRecursiveMeasureInt(function, LuaMetric.COMPLEXITY);
-    if (functionComplexity > maximumFunctionCallComplexityThreshold) {
-      String message = String.format("FunctionCall has a complexity of %s which is greater than %s authorized.", functionComplexity, maximumFunctionCallComplexityThreshold);
-      createIssueWithCost(message, node, (double)functionComplexity - maximumFunctionCallComplexityThreshold);
+    int complexity = ComplexityCalculator.calculate(node);
+    if (complexity > maximumFunctionCallComplexityThreshold) {
+      String message = String.format(
+          "Function call has a complexity of %d which is greater than %d authorized.",
+          complexity, maximumFunctionCallComplexityThreshold);
+      addIssueWithCost(node, message, (double) complexity - maximumFunctionCallComplexityThreshold);
     }
   }
 
   public void setMaximumFunctionCallComplexityThreshold(int threshold) {
     this.maximumFunctionCallComplexityThreshold = threshold;
   }
-
 }

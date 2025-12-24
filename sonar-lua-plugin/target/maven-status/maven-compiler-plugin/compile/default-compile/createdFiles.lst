@@ -1,12 +1,12 @@
 org/sonar/plugins/lua/LuaProfile.class
-org/sonar/plugins/lua/TokenLocation.class
 org/sonar/plugins/lua/cobertura/package-info.class
-org/sonar/plugins/lua/LuaTokensVisitor.class
+org/sonar/plugins/lua/LuaSensor.class
+org/sonar/plugins/lua/LuaSensor$LuaFileCheckContext$IssueInfo.class
+org/sonar/plugins/lua/LuaSensor$LuaFileCheckContext.class
 org/sonar/plugins/lua/core/package-info.class
 org/sonar/plugins/lua/cobertura/CoberturaSensor.class
 org/sonar/plugins/lua/package-info.class
 org/sonar/plugins/lua/core/Lua.class
 org/sonar/plugins/lua/cobertura/CoberturaReportParser.class
 org/sonar/plugins/lua/LuaRulesDefinition.class
-org/sonar/plugins/lua/LuaSquidSensor.class
 org/sonar/plugins/lua/LuaPlugin.class

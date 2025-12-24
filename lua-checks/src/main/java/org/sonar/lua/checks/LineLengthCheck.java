@@ -1,7 +1,6 @@
 /*
  * SonarQube Lua Plugin
- * Copyright (C) 2016 
- * mailto:fati.ahmadi66 AT sonarsource DOT com
+ * Copyright (C) 2013-2024
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -12,52 +11,22 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package org.sonar.lua.checks;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import com.google.common.io.Files;
-import com.sonar.sslr.api.AstAndTokenVisitor;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.sonar.lua.CharsetAwareVisitor;
-import org.sonar.lua.checks.utils.Tags;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
+import java.util.List;
 
-@Rule(
-    key = "LineLength",
-    name = "Lines should not be too long",
-    priority = Priority.MINOR,
-    tags = Tags.CONVENTION
-)
-@ActivatedByDefault
-@SqaleConstantRemediation("1min")
-public class LineLengthCheck extends SquidCheck<LexerlessGrammar> implements  CharsetAwareVisitor {
+/**
+ * Check that lines are not too long.
+ */
+@Rule(key = "LineLength")
+public class LineLengthCheck extends LuaCheck {
 
- // public static final String CHECK_KEY = "LineLength";
   private static final int DEFAULT_MAXIMUM_LINE_LENGTH = 80;
-  private static final Logger LOG = LoggerFactory.getLogger(LineLengthCheck.class);
-  private Charset charset;
 
   @RuleProperty(
     key = "maximumLineLength",
@@ -65,39 +34,19 @@ public class LineLengthCheck extends SquidCheck<LexerlessGrammar> implements  Ch
     defaultValue = "" + DEFAULT_MAXIMUM_LINE_LENGTH)
   public int maximumLineLength = DEFAULT_MAXIMUM_LINE_LENGTH;
 
-  public int getMaximumLineLength() {
-    return maximumLineLength;
-  }
- 
-  private Token previousToken;
-
-
-@Override
-public void setCharset(Charset charset) {
-	this.charset = charset;
-}
   @Override
-  public void visitFile(@Nullable AstNode astNode) {
-    List<String> lines = Collections.emptyList();
-
-    try {
-      lines = Files.readLines(getContext().getFile(), charset);
-    } catch (IOException e) {
-      LOG.error("Unable to execute rule \"LineLength\" for file {} because of error: {}",
-        getContext().getFile().getName(), e);
-    }
+  public void visitFile(AstNode astNode) {
+    List<String> lines = readLines();
     for (int i = 0; i < lines.size(); i++) {
       String line = lines.get(i);
       if (line.length() > maximumLineLength) {
-        getContext().createLineViolation(this, "Split this {0} characters long line (which is greater than {1} authorized).", i + 1, line.length(), maximumLineLength);
+        addLineIssue(i + 1, "Split this {0} characters long line (which is greater than {1} authorized).",
+            line.length(), maximumLineLength);
       }
     }
   }
 
-
-
-
-
-
-
+  public int getMaximumLineLength() {
+    return maximumLineLength;
+  }
 }

@@ -1,7 +1,6 @@
 /*
  * SonarQube Lua Plugin
- * Copyright (C) 2016 
- * mailto:contact AT sonarsource DOT com
+ * Copyright (C) 2013-2024
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -12,21 +11,19 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package org.sonar.plugins.lua;
 
 import org.sonar.api.server.rule.RulesDefinition;
+import org.sonar.api.server.rule.RulesDefinitionAnnotationLoader;
 import org.sonar.lua.checks.CheckList;
 
-import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
-
+/**
+ * Defines the rules available for Lua analysis.
+ */
 public final class LuaRulesDefinition implements RulesDefinition {
 
-  private static final String REPOSITORY_NAME = "SonarQube";
+  private static final String REPOSITORY_NAME = "SonarQube Lua";
 
   @Override
   public void define(Context context) {
@@ -34,7 +31,9 @@ public final class LuaRulesDefinition implements RulesDefinition {
       .createRepository(CheckList.REPOSITORY_KEY, "lua")
       .setName(REPOSITORY_NAME);
 
-    new AnnotationBasedRulesDefinition(repository, "lua").addRuleClasses(false, CheckList.getChecks());
+    // Load rules from annotations
+    RulesDefinitionAnnotationLoader annotationLoader = new RulesDefinitionAnnotationLoader();
+    annotationLoader.load(repository, CheckList.getChecks().toArray(new Class[0]));
 
     repository.done();
   }

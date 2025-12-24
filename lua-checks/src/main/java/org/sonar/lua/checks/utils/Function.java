@@ -1,7 +1,6 @@
 /*
  * SonarQube Lua Plugin
- * Copyright (C) 2016 SonarSource SA
- * mailto:fati.ahmadi AT gmail DOT com
+ * Copyright (C) 2013-2024
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -12,53 +11,67 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package org.sonar.lua.checks.utils;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import com.sonar.sslr.api.AstNode;
 import org.sonar.lua.grammar.LuaGrammar;
-import org.sonar.lua.grammar.LuaGrammar.Keyword;
 
-import java.util.List;
+/**
+ * Utility class for function-related operations.
+ */
+public final class Function {
 
-public class Function {
-    
-    private Function() {
+  private Function() {
+    // Utility class
+  }
+
+  /**
+   * Get the name of a local function.
+   */
+  public static String getName(AstNode functionDef) {
+    if (!functionDef.is(LuaGrammar.LOCALFUNCSTAT)) {
+      throw new IllegalArgumentException("Expected LOCALFUNCSTAT node");
     }
-    
-    public static String getName(AstNode functionDef) {
-        Preconditions.checkArgument(functionDef.is(LuaGrammar.LOCALFUNCSTAT));
-        return functionDef.getFirstChild(LuaGrammar.NAME).getTokenValue();
-        
+    AstNode nameNode = functionDef.getFirstChild(LuaGrammar.NAME);
+    return nameNode != null ? nameNode.getTokenValue() : "";
+  }
+
+  /**
+   * Get the name of a local function.
+   */
+  public static String getLocalName(AstNode functionDef) {
+    return getName(functionDef);
+  }
+
+  /**
+   * Check if a function is an empty constructor.
+   */
+  public static boolean isEmptyConstructor(AstNode functionDef, String className) {
+    if (!functionDef.is(LuaGrammar.LOCALFUNCSTAT)) {
+      throw new IllegalArgumentException("Expected LOCALFUNCSTAT node");
     }
-    
-    public static String getLocalName(AstNode functionDef) {
-        Preconditions.checkArgument(functionDef.is(LuaGrammar.LOCALFUNCSTAT));
-        return functionDef.getFirstChild(LuaGrammar.NAME).getTokenValue();
-        
+    AstNode funcBody = functionDef.getFirstChild(LuaGrammar.FUNCBODY);
+    if (funcBody == null) {
+      return false;
     }
+    AstNode block = funcBody.getFirstChild(LuaGrammar.BLOCK);
     
-    public static boolean isEmptyConstructor(AstNode functionDef, String className) {
-        Preconditions.checkArgument(functionDef.is(LuaGrammar.LOCALFUNCSTAT));
-        AstNode functionBlock = functionDef.getFirstChild(LuaGrammar.FUNCBODY).getFirstChild(LuaGrammar.BLOCK);
-        
-        return isConstructor(functionDef, className)
-        && (functionBlock == null || functionBlock.getFirstChild(LuaGrammar.CHUNK).getChildren().isEmpty());
+    return isConstructor(functionDef, className)
+        && (block == null || block.getFirstChild(LuaGrammar.CHUNK) == null 
+            || block.getFirstChild(LuaGrammar.CHUNK).getChildren().isEmpty());
+  }
+
+  /**
+   * Check if a function is a constructor.
+   */
+  public static boolean isConstructor(AstNode functionDef, String className) {
+    if (!functionDef.is(LuaGrammar.LOCALFUNCSTAT)) {
+      throw new IllegalArgumentException("Expected LOCALFUNCSTAT node");
     }
-    
-    public static boolean isConstructor(AstNode functionDef, String className) {
-        Preconditions.checkArgument(functionDef.is(LuaGrammar.LOCALFUNCSTAT));
-        return functionDef.getFirstChild(LuaGrammar.NAME).getNumberOfChildren() == 1
-        && functionDef.getFirstChild(LuaGrammar.NAME).getFirstChild().getTokenValue().equals(className);
-    }
-    
-    
+    AstNode nameNode = functionDef.getFirstChild(LuaGrammar.NAME);
+    return nameNode != null 
+        && nameNode.getNumberOfChildren() == 1
+        && nameNode.getFirstChild().getTokenValue().equals(className);
+  }
 }
-
-

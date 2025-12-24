@@ -1,7 +1,6 @@
 /*
  * SonarQube Lua Plugin
- * Copyright (C) 2016 
- * mailto:fati.ahmadi66@gmail.com
+ * Copyright (C) 2013-2024
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -12,10 +11,6 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package org.sonar.plugins.lua;
 
@@ -25,6 +20,9 @@ import org.sonar.api.resources.Qualifiers;
 import org.sonar.plugins.lua.cobertura.CoberturaSensor;
 import org.sonar.plugins.lua.core.Lua;
 
+/**
+ * Entry point for the Lua plugin.
+ */
 public class LuaPlugin implements Plugin {
 
   public static final String FILE_SUFFIXES_KEY = "sonar.lua.file.suffixes";
@@ -33,25 +31,32 @@ public class LuaPlugin implements Plugin {
   @Override
   public void define(Context context) {
     context.addExtensions(
+      // Language definition
       Lua.class,
 
-      LuaSquidSensor.class,
+      // Sensors
+      LuaSensor.class,
       CoberturaSensor.class,
 
+      // Rules and profiles
       LuaRulesDefinition.class,
       LuaProfile.class,
 
+      // Properties
       PropertyDefinition.builder(FILE_SUFFIXES_KEY)
         .defaultValue(Lua.DEFAULT_FILE_SUFFIXES)
         .name("File suffixes")
-        .description("Comma-separated list of suffixes for files to analyze. To not filter, leave the list empty.")
+        .description("Comma-separated list of suffixes for files to analyze.")
         .onQualifiers(Qualifiers.PROJECT)
+        .category("Lua")
         .build(),
 
       PropertyDefinition.builder(COBERTURA_REPORT_PATH)
-        .name("Cobertura xml report path")
+        .name("Cobertura XML report path")
         .description("Path to the Cobertura coverage report file. The path may be either absolute or relative to the project base directory.")
         .onQualifiers(Qualifiers.PROJECT)
+        .category("Lua")
+        .subCategory("Coverage")
         .build()
     );
   }

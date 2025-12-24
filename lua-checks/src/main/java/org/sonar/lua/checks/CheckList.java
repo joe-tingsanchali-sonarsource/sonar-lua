@@ -1,7 +1,6 @@
 /*
  * SonarQube Lua Plugin
- * Copyright (C) 2016 
- * mailto:fati.ahmadi66 AT gmail DOT com
+ * Copyright (C) 2013-2024
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -12,29 +11,26 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package org.sonar.lua.checks;
 
-import com.google.common.collect.ImmutableList;
-
+import java.util.Arrays;
 import java.util.List;
 
+/**
+ * List of all Lua checks.
+ */
 public final class CheckList {
 
   public static final String REPOSITORY_KEY = "lua";
-
   public static final String SONAR_WAY_PROFILE = "Sonar way";
 
   private CheckList() {
   }
 
+  @SuppressWarnings("rawtypes")
   public static List<Class> getChecks() {
-    return ImmutableList.<Class>of(
-      
+    return Arrays.asList(
       XPathCheck.class,
       CommentRegularExpressionCheck.class,
       TooManyLinesInFileCheck.class,
@@ -51,7 +47,6 @@ public final class CheckList {
       NestedFunctionsDepthCheck.class,
       NestedTablesDepthCheck.class,
       LocalFunctionComplexityCheck.class
-     );
+    );
   }
-
 }

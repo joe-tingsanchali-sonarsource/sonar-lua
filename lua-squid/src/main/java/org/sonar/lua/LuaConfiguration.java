@@ -1,7 +1,6 @@
 /*
  * SonarQube Lua Plugin
- * Copyright (C) 2016 
- * mailto:fati.ahmadi66 AT gmail DOT com
+ * Copyright (C) 2013-2024
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -12,23 +11,25 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package org.sonar.lua;
 
-import org.sonar.squidbridge.api.SquidConfiguration;
-
 import java.nio.charset.Charset;
 
-public class LuaConfiguration extends SquidConfiguration {
+/**
+ * Configuration for Lua analysis.
+ */
+public class LuaConfiguration {
 
+  private final Charset charset;
   private boolean ignoreHeaderComments;
 
   public LuaConfiguration(Charset charset) {
-    super(charset);
+    this.charset = charset;
+  }
+
+  public Charset getCharset() {
+    return charset;
   }
 
   public void setIgnoreHeaderComments(boolean ignoreHeaderComments) {
@@ -38,5 +39,4 @@ public class LuaConfiguration extends SquidConfiguration {
   public boolean getIgnoreHeaderComments() {
     return ignoreHeaderComments;
   }
-
 }
