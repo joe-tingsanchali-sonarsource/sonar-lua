@@ -1,0 +1,12 @@
+/Users/jting/cursorPlayground/sonar-lua/sonar-lua-plugin/src/main/java/org/sonar/plugins/lua/LuaTokensVisitor.java
+/Users/jting/cursorPlayground/sonar-lua/sonar-lua-plugin/src/main/java/org/sonar/plugins/lua/LuaProfile.java
+/Users/jting/cursorPlayground/sonar-lua/sonar-lua-plugin/src/main/java/org/sonar/plugins/lua/core/package-info.java
+/Users/jting/cursorPlayground/sonar-lua/sonar-lua-plugin/src/main/java/org/sonar/plugins/lua/TokenLocation.java
+/Users/jting/cursorPlayground/sonar-lua/sonar-lua-plugin/src/main/java/org/sonar/plugins/lua/LuaRulesDefinition.java
+/Users/jting/cursorPlayground/sonar-lua/sonar-lua-plugin/src/main/java/org/sonar/plugins/lua/package-info.java
+/Users/jting/cursorPlayground/sonar-lua/sonar-lua-plugin/src/main/java/org/sonar/plugins/lua/cobertura/CoberturaSensor.java
+/Users/jting/cursorPlayground/sonar-lua/sonar-lua-plugin/src/main/java/org/sonar/plugins/lua/LuaSquidSensor.java
+/Users/jting/cursorPlayground/sonar-lua/sonar-lua-plugin/src/main/java/org/sonar/plugins/lua/cobertura/CoberturaReportParser.java
+/Users/jting/cursorPlayground/sonar-lua/sonar-lua-plugin/src/main/java/org/sonar/plugins/lua/core/Lua.java
+/Users/jting/cursorPlayground/sonar-lua/sonar-lua-plugin/src/main/java/org/sonar/plugins/lua/cobertura/package-info.java
+/Users/jting/cursorPlayground/sonar-lua/sonar-lua-plugin/src/main/java/org/sonar/plugins/lua/LuaPlugin.java

@@ -45,13 +45,13 @@ public class LuaPlugin implements Plugin {
         .defaultValue(Lua.DEFAULT_FILE_SUFFIXES)
         .name("File suffixes")
         .description("Comma-separated list of suffixes for files to analyze. To not filter, leave the list empty.")
-        .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+        .onQualifiers(Qualifiers.PROJECT)
         .build(),
 
       PropertyDefinition.builder(COBERTURA_REPORT_PATH)
         .name("Cobertura xml report path")
         .description("Path to the Cobertura coverage report file. The path may be either absolute or relative to the project base directory.")
-        .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+        .onQualifiers(Qualifiers.PROJECT)
         .build()
     );
   }

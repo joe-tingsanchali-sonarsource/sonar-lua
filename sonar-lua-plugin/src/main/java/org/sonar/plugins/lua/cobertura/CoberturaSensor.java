@@ -45,7 +45,7 @@ public class CoberturaSensor implements Sensor {
 
   @Override
   public void execute(SensorContext context) {
-    String reportPath = context.settings().getString(LuaPlugin.COBERTURA_REPORT_PATH);
+    String reportPath = context.config().get(LuaPlugin.COBERTURA_REPORT_PATH).orElse(null);
 
     if (reportPath != null) {
       File xmlFile = getIOFile(context.fileSystem(), reportPath);

@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.sonarsource.lua</groupId>
     <artifactId>lua</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1</version>
   </parent>
 
   <artifactId>sonar-lua-plugin</artifactId>
@@ -16,8 +16,6 @@
   <url>http://redirect.sonarsource.com/plugins/lua.html</url>
 
   <properties>
-    <sonar.pluginClass>org.sonar.plugins.lua.LuaPlugin</sonar.pluginClass>
-    <sonar.pluginName>Lua</sonar.pluginName>
     <sonar.skipDependenciesPackaging>true</sonar.skipDependenciesPackaging>
   </properties>
 
@@ -45,18 +43,14 @@
 
     <!-- unit tests -->
     <dependency>
-      <groupId>org.sonarsource.sonarqube</groupId>
-      <artifactId>sonar-testing-harness</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.easytesting</groupId>
-      <artifactId>fest-assert</artifactId>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.24.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -64,8 +58,20 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
+        <artifactId>sonar-packaging-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <pluginKey>lua</pluginKey>
+          <pluginName>Lua</pluginName>
+          <pluginClass>org.sonar.plugins.lua.LuaPlugin</pluginClass>
+          <sonarQubeMinVersion>8.9</sonarQubeMinVersion>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.4</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -76,30 +82,6 @@
               <shadedArtifactAttached>false</shadedArtifactAttached>
               <minimizeJar>true</minimizeJar>
               <createDependencyReducedPom>false</createDependencyReducedPom>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>enforce-plugin-size</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <phase>verify</phase>
-            <configuration>
-              <rules>
-                <requireFilesSize>
-                  <maxsize>1700000</maxsize>
-                  <minsize>1232056</minsize>
-                  <files>
-                    <file>${project.build.directory}/${project.build.finalName}.jar</file>
-                  </files>
-                </requireFilesSize>
-              </rules>
             </configuration>
           </execution>
         </executions>

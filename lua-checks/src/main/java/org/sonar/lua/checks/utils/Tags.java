@@ -22,6 +22,8 @@ package org.sonar.lua.checks.utils;
 public class Tags {
   public static final String BRAIN_OVERLOAD = "brain-overload";
   public static final String CONVENTION = "convention";
+  public static final String PITFALL = "pitfall";
+  
   private Tags() {
     // This class only defines constants
   }

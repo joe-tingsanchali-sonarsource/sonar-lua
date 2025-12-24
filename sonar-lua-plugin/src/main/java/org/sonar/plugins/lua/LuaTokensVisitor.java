@@ -80,7 +80,7 @@ public class LuaTokensVisitor extends SquidAstVisitor<LexerlessGrammar> {
         TokenLocation tokenLocation = new TokenLocation(token);
         cpdTokens.addToken(tokenLocation.startLine(), tokenLocation.startCharacter(), tokenLocation.endLine(), tokenLocation.endCharacter(), getTokenImage(token));
       }
-      if (tokenType.equals(LuaTokenType.NUMBER)) {
+      if (tokenType.equals(LuaTokenType.NUMERIC_LITERAL)) {
         highlight(highlighting, token, TypeOfText.CONSTANT);
       } else if (tokenType.equals(GenericTokenType.LITERAL)) {
         highlight(highlighting, token, TypeOfText.STRING);
@@ -99,7 +99,7 @@ public class LuaTokensVisitor extends SquidAstVisitor<LexerlessGrammar> {
   private static String getTokenImage(Token token) {
     if (token.getType().equals(GenericTokenType.LITERAL)) {
       return NORMALIZED_CHARACTER_LITERAL;
-    } else if (token.getType().equals(LuaTokenType.NUMBER)) {
+    } else if (token.getType().equals(LuaTokenType.NUMERIC_LITERAL)) {
       return NORMALIZED_NUMERIC_LITERAL;
     }
     return token.getValue();

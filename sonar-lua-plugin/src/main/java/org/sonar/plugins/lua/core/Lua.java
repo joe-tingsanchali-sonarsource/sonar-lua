@@ -19,12 +19,12 @@
  */
 package org.sonar.plugins.lua.core;
 
-import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
-import org.sonar.api.config.Settings;
+import org.sonar.api.config.Configuration;
 import org.sonar.api.resources.AbstractLanguage;
 import org.sonar.plugins.lua.LuaPlugin;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,16 +35,16 @@ public class Lua extends AbstractLanguage {
 
   public static final String DEFAULT_FILE_SUFFIXES = "lua";
 
-  private final Settings settings;
+  private final Configuration config;
 
   /**
    * Creates the {@link Lua} language.
    * <br/>
-   * <b>Do not call, this constructor is called by Pico container.</b>
+   * <b>Do not call, this constructor is called by the IoC container.</b>
    */
-  public Lua(Settings settings) {
+  public Lua(Configuration config) {
     super(KEY, NAME);
-    this.settings = settings;
+    this.config = config;
   }
 
   /**
@@ -52,21 +52,21 @@ public class Lua extends AbstractLanguage {
    */
   @Override
   public String[] getFileSuffixes() {
-    String[] suffixes = filterEmptyStrings(settings.getStringArray(LuaPlugin.FILE_SUFFIXES_KEY));
-    if (suffixes.length == 0) {
+    String[] suffixes = config.getStringArray(LuaPlugin.FILE_SUFFIXES_KEY);
+    if (suffixes == null || suffixes.length == 0) {
       suffixes = StringUtils.split(DEFAULT_FILE_SUFFIXES, ",");
     }
-    return suffixes;
+    return filterEmptyStrings(suffixes);
   }
 
   private static String[] filterEmptyStrings(String[] stringArray) {
-    List<String> nonEmptyStrings = Lists.newArrayList();
+    List<String> nonEmptyStrings = new ArrayList<>();
     for (String string : stringArray) {
       if (StringUtils.isNotBlank(string.trim())) {
         nonEmptyStrings.add(string.trim());
       }
     }
-    return nonEmptyStrings.toArray(new String[nonEmptyStrings.size()]);
+    return nonEmptyStrings.toArray(new String[0]);
   }
 
 }

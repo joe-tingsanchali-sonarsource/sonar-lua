@@ -54,13 +54,19 @@
   <properties>
     <license.title>SonarQube Lua Plugin</license.title>
     <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
 
-    <sonar.version>5.6</sonar.version>
-    <sslr.version>1.21</sslr.version>
-    <logback.version>1.0.13</logback.version>
-    <junit.version>4.12</junit.version>
+    <!-- SonarQube 9.4 compatible versions (last version with old groupId) -->
+    <sonar.version>9.4.0.54424</sonar.version>
+    <sonar.packaging.version>1.21.0.505</sonar.packaging.version>
+    <sslr.version>1.23</sslr.version>
+    <logback.version>1.2.11</logback.version>
+    <junit.version>4.13.2</junit.version>
     <fest.version>1.4</fest.version>
     <orchestrator.version>3.12</orchestrator.version>
+    <slf4j.version>1.7.36</slf4j.version>
 
     <gitRepositoryName>sonar-lua</gitRepositoryName>   
 
@@ -82,11 +88,6 @@
       <dependency>
         <groupId>org.sonarsource.sonarqube</groupId>
         <artifactId>sonar-plugin-api</artifactId>
-        <version>${sonar.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.sonarsource.sonarqube</groupId>
-        <artifactId>sonar-testing-harness</artifactId>
         <version>${sonar.version}</version>
       </dependency>
 
@@ -128,6 +129,10 @@
             <artifactId>sonar-plugin-api</artifactId>
           </exclusion>
           <exclusion>
+            <groupId>org.sonarsource.sonarqube</groupId>
+            <artifactId>sonar-plugin-api</artifactId>
+          </exclusion>
+          <exclusion>
             <groupId>org.picocontainer</groupId>
             <artifactId>picocontainer</artifactId>
           </exclusion>
@@ -142,6 +147,11 @@
         </exclusions>
       </dependency>
 
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>31.1-jre</version>
+      </dependency>
       <dependency>
         <groupId>commons-lang</groupId>
         <artifactId>commons-lang</artifactId>
@@ -181,9 +191,31 @@
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
-        <version>1.7.21</version>
+        <version>${slf4j.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
+          <artifactId>sonar-packaging-maven-plugin</artifactId>
+          <version>${sonar.packaging.version}</version>
+          <extensions>true</extensions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.1</version>
+          <configuration>
+            <source>${maven.compiler.source}</source>
+            <target>${maven.compiler.target}</target>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 
 </project>
