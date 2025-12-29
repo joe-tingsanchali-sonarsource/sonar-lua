@@ -4,7 +4,7 @@ A SonarQube plugin for analyzing Lua code quality.
 
 ## Requirements
 
-- **SonarQube**: 10.0 or higher
+- **SonarQube**: 26.1 or higher (for SonarQube Server 2025.1 or higher)
 - **Java**: 17 or higher
 - **Maven**: 3.8 or higher
 
