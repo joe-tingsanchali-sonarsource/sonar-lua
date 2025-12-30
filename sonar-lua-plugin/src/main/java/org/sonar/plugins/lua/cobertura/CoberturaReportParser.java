@@ -122,7 +122,7 @@ public class CoberturaReportParser {
         if ("true".equals(isBranch) && text != null && !text.isEmpty()) {
           String[] conditions = extractConditions(text);
           if (conditions.length == 2) {
-            newCoverage.conditions(lineId, Integer.parseInt(conditions[1]), Integer.parseInt(conditions[0]));
+        newCoverage.conditions(lineId, Integer.parseInt(conditions[1]), Integer.parseInt(conditions[0]));
           }
         }
       }

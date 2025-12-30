@@ -16,6 +16,7 @@ package org.sonar.lua.checks;
 
 import com.sonar.sslr.api.AstNode;
 import org.sonar.check.Rule;
+import org.sonar.lua.checks.utils.Tags;
 import org.sonar.check.RuleProperty;
 
 /**
@@ -24,7 +25,8 @@ import org.sonar.check.RuleProperty;
 @Rule(
   key = TooManyLinesInFileCheck.CHECK_KEY,
   name = "Files should not have too many lines",
-  description = "Checks that files do not have too many lines of code.")
+  description = "Checks that files do not have too many lines of code.",
+  tags = {Tags.BRAIN_OVERLOAD})
 public class TooManyLinesInFileCheck extends LuaCheck {
 
   public static final String CHECK_KEY = "S104";

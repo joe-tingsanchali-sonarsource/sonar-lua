@@ -61,6 +61,6 @@ public class LuaParser {
   public static class LuaParseException extends RuntimeException {
     public LuaParseException(String message, Throwable cause) {
       super(message, cause);
-    }
+	  }
   }
 }

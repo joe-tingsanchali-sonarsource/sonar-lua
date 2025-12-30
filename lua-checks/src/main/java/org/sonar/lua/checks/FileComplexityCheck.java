@@ -16,6 +16,7 @@ package org.sonar.lua.checks;
 
 import com.sonar.sslr.api.AstNode;
 import org.sonar.check.Rule;
+import org.sonar.lua.checks.utils.Tags;
 import org.sonar.check.RuleProperty;
 import org.sonar.lua.checks.utils.ComplexityCalculator;
 
@@ -25,7 +26,8 @@ import org.sonar.lua.checks.utils.ComplexityCalculator;
 @Rule(
   key = FileComplexityCheck.CHECK_KEY,
   name = "Files should not be too complex",
-  description = "Checks that file complexity does not exceed a configurable threshold.")
+  description = "Checks that file complexity does not exceed a configurable threshold.",
+  tags = {Tags.BRAIN_OVERLOAD})
 public class FileComplexityCheck extends LuaCheck {
 
   public static final String CHECK_KEY = "FileComplexity";

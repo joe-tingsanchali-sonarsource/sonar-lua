@@ -27,12 +27,12 @@
     </developer>
   </developers>
 
-  <modules>
+<modules>
     <module>lua-squid</module>
     <module>lua-checks</module>
-    <module>sonar-lua-plugin</module>
+    <module>sonar-lua-plugin</module>   
     <!-- sslr-lua-toolkit removed - uses deprecated APIs -->
-  </modules>
+</modules>
 
   <scm>
     <connection>scm:git:git@github.com:SonarQubeCommunity/sonar-lua.git</connection>
@@ -95,8 +95,8 @@
 
       <!-- Logging -->
       <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         <version>${slf4j.version}</version>
         <scope>provided</scope>
       </dependency>
@@ -118,6 +118,12 @@
         <groupId>org.mockito</groupId>
         <artifactId>mockito-core</artifactId>
         <version>${mockito.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.sonarsource.sslr</groupId>
+        <artifactId>sslr-testing-harness</artifactId>
+        <version>${sslr.version}</version>
         <scope>test</scope>
       </dependency>
     </dependencies>

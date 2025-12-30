@@ -19,7 +19,7 @@
  */
 package org.sonar.lua.grammar;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
 import static org.sonar.sslr.tests.Assertions.assertThat;

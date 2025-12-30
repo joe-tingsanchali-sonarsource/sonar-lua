@@ -16,6 +16,7 @@ package org.sonar.lua.checks;
 
 import com.sonar.sslr.api.AstNode;
 import org.sonar.check.Rule;
+import org.sonar.lua.checks.utils.Tags;
 import org.sonar.check.RuleProperty;
 
 import java.util.List;
@@ -26,7 +27,8 @@ import java.util.List;
 @Rule(
   key = "LineLength",
   name = "Lines should not be too long",
-  description = "Checks that lines do not exceed a configurable length.")
+  description = "Checks that lines do not exceed a configurable length.",
+  tags = {Tags.CONVENTION})
 public class LineLengthCheck extends LuaCheck {
 
   private static final int DEFAULT_MAXIMUM_LINE_LENGTH = 80;

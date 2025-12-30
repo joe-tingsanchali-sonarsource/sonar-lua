@@ -16,6 +16,7 @@ package org.sonar.lua.checks;
 
 import com.sonar.sslr.api.AstNode;
 import org.sonar.check.Rule;
+import org.sonar.lua.checks.utils.Tags;
 import org.sonar.check.RuleProperty;
 import org.sonar.lua.grammar.LuaGrammar;
 
@@ -25,7 +26,8 @@ import org.sonar.lua.grammar.LuaGrammar;
 @Rule(
   key = "S107",
   name = "Functions should not have too many parameters",
-  description = "Checks that functions do not have too many parameters.")
+  description = "Checks that functions do not have too many parameters.",
+  tags = {Tags.BRAIN_OVERLOAD})
 public class FunctionWithTooManyParametersCheck extends LuaCheck {
 
   private static final int DEFAULT = 7;

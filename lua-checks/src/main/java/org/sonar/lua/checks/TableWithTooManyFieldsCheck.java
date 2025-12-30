@@ -16,6 +16,7 @@ package org.sonar.lua.checks;
 
 import com.sonar.sslr.api.AstNode;
 import org.sonar.check.Rule;
+import org.sonar.lua.checks.utils.Tags;
 import org.sonar.check.RuleProperty;
 import org.sonar.lua.grammar.LuaGrammar;
 
@@ -25,7 +26,8 @@ import org.sonar.lua.grammar.LuaGrammar;
 @Rule(
   key = "TableParameter",
   name = "Tables should not have too many fields",
-  description = "Checks that tables do not have too many fields.")
+  description = "Checks that tables do not have too many fields.",
+  tags = {Tags.BRAIN_OVERLOAD})
 public class TableWithTooManyFieldsCheck extends LuaCheck {
 
   private static final int DEFAULT = 5;

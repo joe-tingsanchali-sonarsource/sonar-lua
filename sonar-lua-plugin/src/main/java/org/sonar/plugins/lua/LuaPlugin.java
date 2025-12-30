@@ -45,8 +45,9 @@ public class LuaPlugin implements Plugin {
       // Properties
       PropertyDefinition.builder(FILE_SUFFIXES_KEY)
         .defaultValue(Lua.DEFAULT_FILE_SUFFIXES)
+        .multiValues(true)
         .name("File suffixes")
-        .description("Comma-separated list of suffixes for files to analyze.")
+        .description("List of suffixes for files to analyze.")
         .onQualifiers(Qualifiers.PROJECT)
         .category("Lua")
         .build(),

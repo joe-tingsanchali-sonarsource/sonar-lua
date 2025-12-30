@@ -16,6 +16,7 @@ package org.sonar.lua.checks;
 
 import com.sonar.sslr.api.AstNode;
 import org.sonar.check.Rule;
+import org.sonar.lua.checks.utils.Tags;
 import org.sonar.check.RuleProperty;
 import org.sonar.lua.grammar.LuaGrammar;
 
@@ -27,7 +28,8 @@ import java.util.regex.Pattern;
 @Rule(
   key = "S100",
   name = "Local function names should comply with a naming convention",
-  description = "Checks that local function names match a provided regular expression.")
+  description = "Checks that local function names match a provided regular expression.",
+  tags = {Tags.CONVENTION})
 public class LocalFunctionNameCheck extends LuaCheck {
 
   private static final String DEFAULT = "^[a-z][a-z_A-Z0-9]*$";

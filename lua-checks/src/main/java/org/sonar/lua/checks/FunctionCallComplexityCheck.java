@@ -16,6 +16,7 @@ package org.sonar.lua.checks;
 
 import com.sonar.sslr.api.AstNode;
 import org.sonar.check.Rule;
+import org.sonar.lua.checks.utils.Tags;
 import org.sonar.check.RuleProperty;
 import org.sonar.lua.checks.utils.ComplexityCalculator;
 import org.sonar.lua.grammar.LuaGrammar;
@@ -26,7 +27,8 @@ import org.sonar.lua.grammar.LuaGrammar;
 @Rule(
   key = "FuncCaLL",
   name = "Function calls should not be too complex",
-  description = "Checks that function call complexity does not exceed a configurable threshold.")
+  description = "Checks that function call complexity does not exceed a configurable threshold.",
+  tags = {Tags.BRAIN_OVERLOAD})
 public class FunctionCallComplexityCheck extends LuaCheck {
 
   private static final int DEFAULT_MAXIMUM_FUNCCALL_COMPLEXITY_THRESHOLD = 5;

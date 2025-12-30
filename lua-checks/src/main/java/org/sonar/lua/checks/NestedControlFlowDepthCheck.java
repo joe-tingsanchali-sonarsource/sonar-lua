@@ -16,6 +16,7 @@ package org.sonar.lua.checks;
 
 import com.sonar.sslr.api.AstNode;
 import org.sonar.check.Rule;
+import org.sonar.lua.checks.utils.Tags;
 import org.sonar.check.RuleProperty;
 import org.sonar.lua.grammar.LuaGrammar;
 
@@ -25,7 +26,8 @@ import org.sonar.lua.grammar.LuaGrammar;
 @Rule(
   key = "S134",
   name = "Control flow statements should not be nested too deeply",
-  description = "Checks that if/for/while statements are not nested too deeply.")
+  description = "Checks that if/for/while statements are not nested too deeply.",
+  tags = {Tags.BRAIN_OVERLOAD})
 public class NestedControlFlowDepthCheck extends LuaCheck {
 
   private int nestingLevel;

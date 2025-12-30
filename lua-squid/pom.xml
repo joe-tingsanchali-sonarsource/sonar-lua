@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>lua-squid</artifactId>
-  <packaging>jar</packaging>
+   <packaging>jar</packaging>
   <name>Lua :: Squid</name>
   <description>Lua language parser and AST utilities</description>
 
@@ -35,6 +35,10 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.sonarsource.sslr</groupId>
+      <artifactId>sslr-testing-harness</artifactId>
     </dependency>
   </dependencies>
 

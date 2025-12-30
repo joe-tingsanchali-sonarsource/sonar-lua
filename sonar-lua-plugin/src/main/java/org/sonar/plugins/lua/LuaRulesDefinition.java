@@ -21,9 +21,9 @@ import org.sonar.lua.checks.CheckList;
 /**
  * Defines the rules available for Lua analysis.
  */
-public final class LuaRulesDefinition implements RulesDefinition {
+public class LuaRulesDefinition implements RulesDefinition {
 
-  private static final String REPOSITORY_NAME = "SonarQube Lua";
+  private static final String REPOSITORY_NAME = "SonarQube";
 
   @Override
   public void define(Context context) {
@@ -31,9 +31,16 @@ public final class LuaRulesDefinition implements RulesDefinition {
       .createRepository(CheckList.REPOSITORY_KEY, "lua")
       .setName(REPOSITORY_NAME);
 
-    // Load rules from annotations
+    // Load rules from annotated check classes
     RulesDefinitionAnnotationLoader annotationLoader = new RulesDefinitionAnnotationLoader();
     annotationLoader.load(repository, CheckList.getChecks().toArray(new Class[0]));
+
+    // Mark template rules
+    for (NewRule rule : repository.rules()) {
+      if ("XPath".equals(rule.key()) || "CommentRegularExpression".equals(rule.key())) {
+        rule.setTemplate(true);
+      }
+    }
 
     repository.done();
   }

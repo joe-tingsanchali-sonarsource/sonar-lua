@@ -14,6 +14,8 @@
  */
 package org.sonar.plugins.lua;
 
+import java.util.Set;
+
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 import org.sonar.check.Rule;
 import org.sonar.lua.checks.CheckList;
@@ -24,18 +26,24 @@ import org.sonar.plugins.lua.core.Lua;
  */
 public class LuaProfile implements BuiltInQualityProfilesDefinition {
 
+  // Template rules cannot be activated directly - they must be customized by users
+  private static final Set<String> TEMPLATE_RULE_KEYS = Set.of(
+    "CommentRegularExpression",
+    "XPath"
+  );
+
   @Override
   public void define(Context context) {
     NewBuiltInQualityProfile profile = context.createBuiltInQualityProfile(
         CheckList.SONAR_WAY_PROFILE, Lua.KEY);
     profile.setDefault(true);
 
-    // Activate all rules from the CheckList
+    // Activate all non-template rules from the CheckList
     for (Class<?> checkClass : CheckList.getChecks()) {
       Rule ruleAnnotation = checkClass.getAnnotation(Rule.class);
       if (ruleAnnotation != null) {
         String ruleKey = ruleAnnotation.key();
-        if (ruleKey != null && !ruleKey.isEmpty()) {
+        if (ruleKey != null && !ruleKey.isEmpty() && !TEMPLATE_RULE_KEYS.contains(ruleKey)) {
           profile.activateRule(CheckList.REPOSITORY_KEY, ruleKey);
         }
       }
